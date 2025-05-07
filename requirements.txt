@@ -1,0 +1,7 @@
+# Should be mirrored in pyporject.toml
+decorator
+packaging
+pip
+setuptools>=64
+setuptools-scm>=8
+wheel
