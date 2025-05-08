@@ -50,7 +50,8 @@ class TpuPlatform(Platform):
     def pre_register_and_update(cls,
                                 parser: Optional[FlexibleArgumentParser] = None
                                 ) -> None:
-        from vllm_tpu.patch import platform  # noqa: F401
+        # Patches arent working
+        #from vllm_tpu.patch import platform  # noqa: F401
         from vllm_tpu.model_executor.layers.quantization.tpu_int8 import \
             Int8TpuConfig  # noqa: F401
 
