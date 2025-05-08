@@ -5,5 +5,5 @@ def register():
 
 
 def register_model():
-    from .models import register_model
+    from .model_executor.models import register_model
     register_model()

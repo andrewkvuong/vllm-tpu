@@ -13,6 +13,7 @@ from vllm.sampling_params import SamplingParams, SamplingType
 if TYPE_CHECKING:
     from vllm.config import ModelConfig, VllmConfig
     from vllm.pooling_params import PoolingParams
+    from vllm.utils import FlexibleArgumentParser
 else:
     ModelConfig = None
     VllmConfig = None
@@ -47,10 +48,19 @@ class TpuPlatform(Platform):
 
         if use_v1:
             logger.info("Using Pallas V1 backend.")
-            return "vllm.v1.attention.backends.pallas.PallasAttentionBackend"
+            return "vllm_tpu.attention.backends.pallas.PallasAttentionBackend"
         else:
             logger.info("Using Pallas backend.")
             return "vllm.attention.backends.pallas.PallasAttentionBackend"
+
+    @classmethod
+    def pre_register_and_update(cls,
+                                parser: Optional[FlexibleArgumentParser] = None
+                                ) -> None:
+        from vllm_tpu.model_executor.layers.quantization.tpu_int8 import \
+            Int8TpuConfig # noqa: F401
+        from vllm_tpu.patch import platform  # noqa: F401
+        return None
 
     @classmethod
     def get_device_name(cls, device_id: int = 0) -> str:
@@ -97,7 +107,7 @@ class TpuPlatform(Platform):
             vllm_config.model_config.dtype = torch.bfloat16
 
         if envs.VLLM_USE_V1:
-            from vllm.v1.attention.backends.pallas import \
+            from vllm_tpu.attention.backends.pallas import \
                 PallasAttentionBackend
             cache_config.block_size = PallasAttentionBackend.get_page_size(
                 vllm_config)
@@ -127,7 +137,7 @@ class TpuPlatform(Platform):
             else:
                 if envs.VLLM_USE_V1:
                     parallel_config.worker_cls = \
-                        "vllm.v1.worker.tpu_worker.TPUWorker"
+                        "vllm_tpu.worker.tpu_worker.TPUWorker"
                 else:
                     parallel_config.worker_cls = \
                         "vllm.worker.tpu_worker.TPUWorker"
@@ -149,7 +159,7 @@ class TpuPlatform(Platform):
 
     @classmethod
     def get_device_communicator_cls(cls) -> str:
-        return "vllm.distributed.device_communicators.tpu_communicator.TpuCommunicator"  # noqa
+        return "vllm_tpu.distributed.device_communicators.tpu_communicator.TpuCommunicator"  # noqa
 
     @classmethod
     def use_all_gather(cls) -> bool:
