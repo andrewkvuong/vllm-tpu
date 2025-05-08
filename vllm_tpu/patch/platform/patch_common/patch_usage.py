@@ -19,6 +19,7 @@ from vllm.version import __version__ as VLLM_VERSION
 def _report_usage_once(self, model_architecture: str,
                        usage_context: UsageContext,
                        extra_kvs: dict[str, Any]) -> None:
+    print("Using patched usage!")
     import torch_xla
     self.gpu_count = torch_xla.runtime.world_size()
     self.gpu_type = torch_xla.tpu.get_tpu_type()

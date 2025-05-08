@@ -11,6 +11,7 @@ def choose_scaled_mm_linear_kernel(
         config: ScaledMMLinearLayerConfig,
         compute_capability: Optional[int] = None
 ) -> Type[ScaledMMLinearKernel]:
+    print("Using patched xla scaled mm!")
     return XLAScaledMMLinearKernel
 
 vllm.model_executor.layers.quantization.kernels.scaled_mm.choose_scaled_mm_linear_kernel = choose_scaled_mm_linear_kernel

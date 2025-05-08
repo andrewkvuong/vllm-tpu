@@ -11,6 +11,7 @@ def set_weight_attrs(
     weight: torch.Tensor,
     weight_attrs: Optional[Dict[str, Any]],
 ):
+    print("Using patched utils!")
     """Set attributes on a weight tensor.
 
     This method is used to set attributes on a weight tensor. This method

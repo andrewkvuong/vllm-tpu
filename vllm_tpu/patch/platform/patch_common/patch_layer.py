@@ -13,6 +13,7 @@ def forward(
 ) -> torch.Tensor:
     """Input shape: batch_size x seq_len x hidden_size"""
     # TODO(Isotr0py): Use existing backend implementations and support FA3
+    print("Using patched forward layer!")
     bsz, q_len, _ = query.size()
     kv_len = key.size(1)
 

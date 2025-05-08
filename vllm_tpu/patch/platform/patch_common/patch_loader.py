@@ -14,6 +14,7 @@ from vllm.model_executor.model_loader.weight_utils import (
 def _get_weights_iterator(
         self,
         source: "Source") -> Generator[Tuple[str, torch.Tensor], None, None]:
+    print("Using patched loader!")
     """Get an iterator for the model weights based on the load format."""
     hf_folder, hf_weights_files, use_safetensors = self._prepare_weights(
         source.model_or_path, source.revision, source.fall_back_to_pt,
