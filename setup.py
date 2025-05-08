@@ -1,6 +1,6 @@
 import os
 
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools_scm import get_version
 
 
@@ -78,7 +78,7 @@ setup(
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
         "Topic :: Scientific/Engineering :: Information Analysis",
     ],
-    # packages=find_packages(exclude=("docs", "examples", "tests*", "csrc")),
+    packages=find_packages(exclude=("docs", "examples", "tests*", "csrc")),
     python_requires=">=3.9",
     install_requires=get_requirements(),
     ext_modules=ext_modules,
