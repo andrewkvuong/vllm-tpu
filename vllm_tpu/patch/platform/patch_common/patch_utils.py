@@ -1,11 +1,11 @@
 # https://github.com/vllm-project/vllm/blob/5b8c390747a13dde7665e404ee0c4f67270be2f0/vllm/model_executor/utils.py#L42
 
-
 from typing import Any, Dict, Optional
 
 import torch
 import vllm
 import vllm.model_executor.utils
+
 
 def set_weight_attrs(
     weight: torch.Tensor,
@@ -36,7 +36,8 @@ def set_weight_attrs(
         # we sync the param tensor after its weight loader is called.
         # TODO(woosuk): Remove this hack once we have a better solution.
         if key == "weight_loader":
-            value =  vllm.model_executor.utils._make_synced_weight_loader(value)
+            value = vllm.model_executor.utils._make_synced_weight_loader(value)
         setattr(weight, key, value)
+
 
 vllm.model_executor.utils.set_weight_attrs = set_weight_attrs

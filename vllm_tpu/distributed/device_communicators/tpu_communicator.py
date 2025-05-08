@@ -5,12 +5,11 @@ from typing import Optional
 
 import torch
 from torch.distributed import ProcessGroup
-
 from vllm.config import get_current_vllm_config
+from vllm.distributed.device_communicators.base_device_communicator import \
+    DeviceCommunicatorBase
 from vllm.logger import init_logger
 from vllm.platforms import current_platform
-
-from vllm.distributed.device_communicators.base_device_communicator import DeviceCommunicatorBase
 
 USE_RAY = parallel_config = get_current_vllm_config(
 ).parallel_config.distributed_executor_backend == "ray"
@@ -22,8 +21,8 @@ if current_platform.is_tpu():
     import torch_xla.core.xla_model as xm
     import torch_xla.runtime as xr
     from torch_xla._internal import pjrt
-    from torch_xla.distributed.xla_multiprocessing import (
-        create_optimized_replica_groups)
+    from torch_xla.distributed.xla_multiprocessing import \
+        create_optimized_replica_groups
 
     if USE_RAY:
         from vllm.executor import ray_utils

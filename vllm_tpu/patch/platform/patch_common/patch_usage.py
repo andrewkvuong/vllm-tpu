@@ -1,33 +1,24 @@
 # https://github.com/vllm-project/vllm/blob/5b8c390747a13dde7665e404ee0c4f67270be2f0/vllm/usage/usage_lib.py#L177
 
-import datetime
 import json
-import logging
-import os
 import platform
-import time
-from enum import Enum
-from pathlib import Path
-from threading import Thread
-from typing import Any, Optional, Union
-from uuid import uuid4
+from typing import Any
 
 import cpuinfo
 import psutil
-import requests
-import torch
-
 import vllm
-import vllm.usage
-from vllm.usage.usage_lib import UsageContext, UsageMessage
-import vllm.usage.usage_lib
-from vllm.usage.usage_lib import _detect_cloud_provider, _get_current_timestamp_ns, _USAGE_ENV_VARS_TO_COLLECT
-from vllm.version import __version__ as VLLM_VERSION
 import vllm.envs as envs
+import vllm.usage
+import vllm.usage.usage_lib
+from vllm.usage.usage_lib import (_USAGE_ENV_VARS_TO_COLLECT, UsageContext,
+                                  _detect_cloud_provider,
+                                  _get_current_timestamp_ns)
+from vllm.version import __version__ as VLLM_VERSION
+
 
 def _report_usage_once(self, model_architecture: str,
-                        usage_context: UsageContext,
-                        extra_kvs: dict[str, Any]) -> None:
+                       usage_context: UsageContext,
+                       extra_kvs: dict[str, Any]) -> None:
     import torch_xla
     self.gpu_count = torch_xla.runtime.world_size()
     self.gpu_type = torch_xla.tpu.get_tpu_type()

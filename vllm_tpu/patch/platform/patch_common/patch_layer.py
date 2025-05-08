@@ -1,8 +1,9 @@
 # https://github.com/vllm-project/vllm/blob/main/vllm/attention/layer.py#L330
 
+import torch
 import vllm
 import vllm.attention.layer
-import torch
+
 
 def forward(
     self,
@@ -24,8 +25,7 @@ def forward(
         key = torch.repeat_interleave(key, num_repeat, dim=2)
         value = torch.repeat_interleave(value, num_repeat, dim=2)
 
-    query, key, value = (x.transpose(1, 2)
-                            for x in (query, key, value))
+    query, key, value = (x.transpose(1, 2) for x in (query, key, value))
     from torch_xla.experimental.custom_kernel import flash_attention
     out = flash_attention(query, key, value, sm_scale=self.scale)
     out = out.transpose(1, 2)
@@ -34,4 +34,3 @@ def forward(
 
 
 vllm.attention.layer.MultiHeadAttention.forward = forward
-

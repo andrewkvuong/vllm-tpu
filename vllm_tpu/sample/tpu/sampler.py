@@ -3,9 +3,10 @@
 
 import torch
 import torch.nn as nn
-
 from vllm.v1.outputs import LogprobsTensors, SamplerOutput
+
 from vllm_tpu.sample.ops.topk_topp_sampler import TopKTopPSampler
+
 from .metadata import TPUSupportedSamplingMetadata
 
 _SAMPLING_EPS = 1e-5

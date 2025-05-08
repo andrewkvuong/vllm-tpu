@@ -1,5 +1,6 @@
 from packaging.version import InvalidVersion, Version
 
+
 def vllm_version_is(target_vllm_version: str):
     import vllm
     vllm_version = vllm.__version__
@@ -11,6 +12,7 @@ def vllm_version_is(target_vllm_version: str):
             "is installed probably. Set the environment variable VLLM_VERSION "
             "to control it by hand. And please make sure the vaule follows the "
             "format of x.y.z.")
+
 
 # Import specific patches for different versions
 if vllm_version_is("0.8.5") or vllm_version_is("0.8.5.post1"):

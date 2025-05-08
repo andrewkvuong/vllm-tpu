@@ -1,19 +1,22 @@
 # https://github.com/vllm-project/vllm/blob/6115b115826040ad1f49b69a8b4fdd59f0df5113/vllm/model_executor/model_loader/loader.py#L395
-import torch
 import time
 from typing import Generator, Tuple
+
+import torch
 import vllm
 import vllm.model_executor.model_loader
 import vllm.model_executor.model_loader.default_loader
-from vllm.model_executor.model_loader.default_loader.DefaultModelLoader import Source
-from vllm.config import (LoadFormat)
+from vllm.config import LoadFormat
+from vllm.model_executor.model_loader.default_loader.DefaultModelLoader import \
+    Source
 from vllm.model_executor.model_loader.weight_utils import (
     fastsafetensors_weights_iterator, np_cache_weights_iterator,
     pt_weights_iterator, safetensors_weights_iterator)
 
+
 def _get_weights_iterator(
-        self, source: "Source"
-) -> Generator[Tuple[str, torch.Tensor], None, None]:
+        self,
+        source: "Source") -> Generator[Tuple[str, torch.Tensor], None, None]:
     """Get an iterator for the model weights based on the load format."""
     hf_folder, hf_weights_files, use_safetensors = self._prepare_weights(
         source.model_or_path, source.revision, source.fall_back_to_pt,

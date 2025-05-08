@@ -12,7 +12,6 @@ import torch.nn as nn
 # TPU XLA related
 import torch_xla.core.xla_model as xm
 import torch_xla.runtime as xr
-
 import vllm.envs as envs
 from vllm.attention.backends.abstract import AttentionType
 from vllm.attention.layer import Attention
@@ -27,20 +26,20 @@ from vllm.multimodal.inputs import (BatchedTensorInputs, MultiModalKwargs,
 from vllm.multimodal.utils import group_mm_inputs_by_modality
 from vllm.sequence import IntermediateTensors
 from vllm.utils import LayerBlockType, cdiv, is_pin_memory_available
-from vllm_tpu.attention.backends.pallas import (PallasAttentionBackend,
-                                               PallasMetadata)
 from vllm.v1.core.encoder_cache_manager import compute_encoder_budget
 from vllm.v1.kv_cache_interface import (AttentionSpec, FullAttentionSpec,
                                         KVCacheConfig, KVCacheSpec,
                                         SlidingWindowSpec)
 from vllm.v1.outputs import (EMPTY_MODEL_RUNNER_OUTPUT, LogprobsTensors,
                              ModelRunnerOutput)
-from vllm_tpu.sample.tpu.metadata import TPUSupportedSamplingMetadata
-from vllm_tpu.sample.tpu.sampler import Sampler as TPUSampler
 from vllm.v1.utils import bind_kv_cache
 from vllm.v1.worker.gpu_input_batch import CachedRequestState, InputBatch
-
 from vllm.v1.worker.utils import sanity_check_mm_encoder_outputs
+
+from vllm_tpu.attention.backends.pallas import (PallasAttentionBackend,
+                                                PallasMetadata)
+from vllm_tpu.sample.tpu.metadata import TPUSupportedSamplingMetadata
+from vllm_tpu.sample.tpu.sampler import Sampler as TPUSampler
 
 if TYPE_CHECKING:
     from vllm.v1.core.sched.output import SchedulerOutput
