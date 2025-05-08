@@ -43,7 +43,7 @@ class TpuPlatform(Platform):
         # if (selected_backend != _Backend.PALLAS
         #         and selected_backend != _Backend.PALLAS_VLLM_V1):
         #     logger.info("Cannot use %s backend on TPU.", selected_backend)
-
+        print("get_attn_backend_cls")
         if use_v1:
             logger.info("Using Pallas V1 backend.")
             return "vllm_tpu.attention.backends.pallas.PallasAttentionBackend"
@@ -55,10 +55,10 @@ class TpuPlatform(Platform):
     def pre_register_and_update(cls,
                                 parser: Optional[FlexibleArgumentParser] = None
                                 ) -> None:
+        print("pre_register_and_update")
         from vllm_tpu.patch import platform  # noqa: F401
         from vllm_tpu.model_executor.layers.quantization.tpu_int8 import \
             Int8TpuConfig  # noqa: F401
-        return None
 
     @classmethod
     def get_device_name(cls, device_id: int = 0) -> str:
