@@ -1,6 +1,6 @@
 def register():
     """Register the TPU platform."""
-    print("USING VLLM_TPU!!!!")
+    from vllm_tpu.patch import platform  # noqa: F401
     return "vllm_tpu.platform.TpuPlatform"
 
 
