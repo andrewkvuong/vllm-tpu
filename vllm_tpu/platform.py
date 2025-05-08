@@ -7,7 +7,8 @@ import vllm.envs as envs
 from tpu_info import device
 from vllm.inputs import ProcessorInputs, PromptType
 from vllm.logger import init_logger
-from vllm.platforms.interface import Platform, PlatformEnum, _Backend
+from vllm.platforms import Platform
+from vllm.platforms.interface import PlatformEnum, _Backend
 from vllm.sampling_params import SamplingParams, SamplingType
 from vllm.utils import FlexibleArgumentParser
 
