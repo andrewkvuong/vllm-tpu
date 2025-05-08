@@ -5,24 +5,23 @@ from typing import TYPE_CHECKING, Optional, Union
 import torch
 import vllm.envs as envs
 from tpu_info import device
-# from vllm.inputs import ProcessorInputs, PromptType
+from vllm.inputs import ProcessorInputs, PromptType
 from vllm.logger import logger
 from vllm.platforms import Platform, PlatformEnum
-# from vllm.platforms.interface import _Backend
-# from vllm.sampling_params import SamplingParams, SamplingType
+from vllm.sampling_params import SamplingParams, SamplingType
 from vllm.utils import FlexibleArgumentParser
 
 if TYPE_CHECKING:
     from vllm.config import ModelConfig, VllmConfig
-    # from vllm.pooling_params import PoolingParams
+    from vllm.pooling_params import PoolingParams
 else:
     ModelConfig = None
     VllmConfig = None
     PoolingParams = None
 
 class TpuPlatform(Platform):
-    _enum = PlatformEnum.OOT
-    device_name: str = "cpu"
+    _enum = PlatformEnum.TPU
+    device_name: str = "tpu"
     device_type: str = "tpu"
     dispatch_key: str = "XLA"
     ray_device_key: str = "TPU"
@@ -40,10 +39,6 @@ class TpuPlatform(Platform):
                              dtype: torch.dtype, kv_cache_dtype: Optional[str],
                              block_size: int, use_v1: bool,
                              use_mla: bool) -> str:
-        # if (selected_backend != _Backend.PALLAS
-        #         and selected_backend != _Backend.PALLAS_VLLM_V1):
-        #     logger.info("Cannot use %s backend on TPU.", selected_backend)
-        print("get_attn_backend_cls")
         if use_v1:
             logger.info("Using Pallas V1 backend.")
             return "vllm_tpu.attention.backends.pallas.PallasAttentionBackend"
@@ -168,18 +163,18 @@ class TpuPlatform(Platform):
         # V1 support on TPU is experimental
         return True
 
-    # @classmethod
-    # def validate_request(
-    #     cls,
-    #     prompt: PromptType,
-    #     params: Union[SamplingParams, PoolingParams],
-    #     processed_inputs: ProcessorInputs,
-    # ) -> None:
-    #     """Raises if this request is unsupported on this platform"""
-    #     if isinstance(params, SamplingParams):
-    #         if params.guided_decoding is not None and not envs.VLLM_USE_V1:
-    #             raise ValueError("Structured output is not supported on "
-    #                              f"{cls.device_name} V0.")
-    #         if params.sampling_type == SamplingType.RANDOM_SEED:
-    #             raise ValueError(
-    #                 "Torch XLA does not support per-request seed.")
+    @classmethod
+    def validate_request(
+        cls,
+        prompt: PromptType,
+        params: Union[SamplingParams, PoolingParams],
+        processed_inputs: ProcessorInputs,
+    ) -> None:
+        """Raises if this request is unsupported on this platform"""
+        if isinstance(params, SamplingParams):
+            if params.guided_decoding is not None and not envs.VLLM_USE_V1:
+                raise ValueError("Structured output is not supported on "
+                                 f"{cls.device_name} V0.")
+            if params.sampling_type == SamplingType.RANDOM_SEED:
+                raise ValueError(
+                    "Torch XLA does not support per-request seed.")
