@@ -9,11 +9,11 @@ from vllm.inputs import ProcessorInputs, PromptType
 from vllm.logger import init_logger
 from vllm.platforms.interface import Platform, PlatformEnum, _Backend
 from vllm.sampling_params import SamplingParams, SamplingType
+from vllm.utils import FlexibleArgumentParser
 
 if TYPE_CHECKING:
     from vllm.config import ModelConfig, VllmConfig
     from vllm.pooling_params import PoolingParams
-    from vllm.utils import FlexibleArgumentParser
 else:
     ModelConfig = None
     VllmConfig = None
@@ -23,7 +23,7 @@ logger = init_logger(__name__)
 
 
 class TpuPlatform(Platform):
-    _enum = PlatformEnum.TPU
+    _enum = PlatformEnum.OOT
     device_name: str = "tpu"
     device_type: str = "tpu"
     dispatch_key: str = "XLA"
