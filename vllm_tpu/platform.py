@@ -10,11 +10,11 @@ from vllm.logger import logger
 from vllm.platforms import Platform, PlatformEnum
 # from vllm.platforms.interface import _Backend
 # from vllm.sampling_params import SamplingParams, SamplingType
+from vllm.utils import FlexibleArgumentParser
 
 if TYPE_CHECKING:
     from vllm.config import ModelConfig, VllmConfig
     # from vllm.pooling_params import PoolingParams
-    from vllm.utils import FlexibleArgumentParser
 else:
     ModelConfig = None
     VllmConfig = None
