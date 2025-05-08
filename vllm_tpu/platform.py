@@ -5,23 +5,20 @@ from typing import TYPE_CHECKING, Optional, Union
 import torch
 import vllm.envs as envs
 from tpu_info import device
-from vllm.inputs import ProcessorInputs, PromptType
-from vllm.logger import init_logger
-from vllm.platforms import Platform
-from vllm.platforms.interface import PlatformEnum, _Backend
-from vllm.sampling_params import SamplingParams, SamplingType
-from vllm.utils import FlexibleArgumentParser
+# from vllm.inputs import ProcessorInputs, PromptType
+from vllm.logger import logger
+from vllm.platforms import Platform, PlatformEnum
+# from vllm.platforms.interface import _Backend
+# from vllm.sampling_params import SamplingParams, SamplingType
 
 if TYPE_CHECKING:
     from vllm.config import ModelConfig, VllmConfig
-    from vllm.pooling_params import PoolingParams
+    # from vllm.pooling_params import PoolingParams
+    from vllm.utils import FlexibleArgumentParser
 else:
     ModelConfig = None
     VllmConfig = None
     PoolingParams = None
-
-logger = init_logger(__name__)
-
 
 class TpuPlatform(Platform):
     _enum = PlatformEnum.OOT
@@ -39,13 +36,13 @@ class TpuPlatform(Platform):
     ]
 
     @classmethod
-    def get_attn_backend_cls(cls, selected_backend: _Backend, head_size: int,
+    def get_attn_backend_cls(cls, selected_backend, head_size: int,
                              dtype: torch.dtype, kv_cache_dtype: Optional[str],
                              block_size: int, use_v1: bool,
                              use_mla: bool) -> str:
-        if (selected_backend != _Backend.PALLAS
-                and selected_backend != _Backend.PALLAS_VLLM_V1):
-            logger.info("Cannot use %s backend on TPU.", selected_backend)
+        # if (selected_backend != _Backend.PALLAS
+        #         and selected_backend != _Backend.PALLAS_VLLM_V1):
+        #     logger.info("Cannot use %s backend on TPU.", selected_backend)
 
         if use_v1:
             logger.info("Using Pallas V1 backend.")
@@ -171,18 +168,18 @@ class TpuPlatform(Platform):
         # V1 support on TPU is experimental
         return True
 
-    @classmethod
-    def validate_request(
-        cls,
-        prompt: PromptType,
-        params: Union[SamplingParams, PoolingParams],
-        processed_inputs: ProcessorInputs,
-    ) -> None:
-        """Raises if this request is unsupported on this platform"""
-        if isinstance(params, SamplingParams):
-            if params.guided_decoding is not None and not envs.VLLM_USE_V1:
-                raise ValueError("Structured output is not supported on "
-                                 f"{cls.device_name} V0.")
-            if params.sampling_type == SamplingType.RANDOM_SEED:
-                raise ValueError(
-                    "Torch XLA does not support per-request seed.")
+    # @classmethod
+    # def validate_request(
+    #     cls,
+    #     prompt: PromptType,
+    #     params: Union[SamplingParams, PoolingParams],
+    #     processed_inputs: ProcessorInputs,
+    # ) -> None:
+    #     """Raises if this request is unsupported on this platform"""
+    #     if isinstance(params, SamplingParams):
+    #         if params.guided_decoding is not None and not envs.VLLM_USE_V1:
+    #             raise ValueError("Structured output is not supported on "
+    #                              f"{cls.device_name} V0.")
+    #         if params.sampling_type == SamplingType.RANDOM_SEED:
+    #             raise ValueError(
+    #                 "Torch XLA does not support per-request seed.")
