@@ -5,6 +5,8 @@ from typing import Optional
 import torch
 import torch.nn as nn
 from vllm.logger import init_logger
+from vllm.v1.sample.ops.topk_topp_sampler import random_sample
+
 
 logger = init_logger(__name__)
 
