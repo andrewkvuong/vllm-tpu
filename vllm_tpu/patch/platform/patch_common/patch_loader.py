@@ -5,10 +5,7 @@ from typing import Generator, Tuple
 import torch
 import vllm
 import vllm.model_executor.model_loader
-import vllm.model_executor.model_loader.default_loader
 from vllm.config import LoadFormat
-from vllm.model_executor.model_loader.default_loader.DefaultModelLoader import \
-    Source
 from vllm.model_executor.model_loader.weight_utils import (
     fastsafetensors_weights_iterator, np_cache_weights_iterator,
     pt_weights_iterator, safetensors_weights_iterator)
