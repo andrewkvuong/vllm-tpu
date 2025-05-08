@@ -22,7 +22,7 @@ else:
 
 class TpuPlatform(Platform):
     _enum = PlatformEnum.OOT
-    device_name: str = "tpu"
+    device_name: str = "cpu"
     device_type: str = "tpu"
     dispatch_key: str = "XLA"
     ray_device_key: str = "TPU"
