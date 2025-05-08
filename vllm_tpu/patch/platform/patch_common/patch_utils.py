@@ -3,6 +3,7 @@
 from typing import Any, Dict, Optional
 
 import torch
+import vllm
 
 def set_weight_attrs(
     weight: torch.Tensor,
