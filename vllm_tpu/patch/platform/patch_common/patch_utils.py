@@ -39,4 +39,14 @@ def set_weight_attrs(
         setattr(weight, key, value)
 
 
-vllm.model_executor.utils.set_weight_attrs = set_weight_attrs
+print("DEBUG: About to apply monkey patch for set_weight_attrs.", flush=True)
+# Store the original for inspection or if you need to call it
+original_set_weight_attrs = vllm.model_executor.utils.set_weight_attrs
+
+vllm.model_executor.utils.set_weight_attrs = set_weight_attrs # Apply your function
+
+print("DEBUG: Monkey patch for set_weight_attrs APPLIED.", flush=True)
+print(f"DEBUG: Original set_weight_attrs id: {id(original_set_weight_attrs)}", flush=True)
+print(f"DEBUG: Current vllm.model_executor.utils.set_weight_attrs id: {id(vllm.model_executor.utils.set_weight_attrs)}", flush=True)
+print(f"DEBUG: Your patched function id: {id(set_weight_attrs)}", flush=True)
+#vllm.model_executor.utils.set_weight_attrs = set_weight_attrs
